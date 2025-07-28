@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Magic Mall All In One Game ID Checker V1</title>
+  <title>Magic Mall Game ID Checker V1</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
@@ -16,11 +16,10 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      padding: 40px 20px;
+      padding: 30px 15px;
       min-height: 100vh;
-      overflow-x: hidden;
-      animation: gradientFlow 10s ease infinite;
       background-size: 400% 400%;
+      animation: gradientFlow 10s ease infinite;
     }
     @keyframes gradientFlow {
       0% { background-position: 0% 50%; }
@@ -29,59 +28,83 @@
     }
     .container {
       background: #1e2a38;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      max-width: 500px;
+      padding: 20px 15px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 420px;
       width: 100%;
-      animation: fadeIn 1s ease-out;
+      animation: fadeIn 0.6s ease-out;
       text-align: center;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .logo {
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       object-fit: contain;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       border: 2px solid #00c6ff;
       background: #fff;
       border-radius: 10px;
     }
     h2 {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       font-family: 'Orbitron', sans-serif;
-      font-size: 22px;
-      letter-spacing: 1px;
+      font-size: 18px;
     }
+
     .tabs {
       display: flex;
-      flex-wrap: wrap;
+      overflow-x: auto;
+      white-space: nowrap;
       gap: 10px;
-      justify-content: center;
-      margin-bottom: 15px;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
     }
+    .tabs.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
     .tab-btn {
-      padding: 10px 15px;
+      padding: 6px 12px;
+      font-size: 13px;
       background: #00c6ff;
       border: none;
-      border-radius: 8px;
+      border-radius: 20px;
       color: #fff;
       cursor: pointer;
-      font-size: 14px;
+      transition: 0.2s ease;
+      white-space: nowrap;
+    }
+    .tab-btn:hover {
+      background: #00aaff;
     }
     .tab-btn.active {
       background: #0072ff;
+      animation: bounce 0.3s ease;
     }
+    @keyframes bounce {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
     input, button {
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 10px;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 8px;
       border: none;
-      font-size: 16px;
+      font-size: 14px;
     }
     button {
       background: linear-gradient(to right, #0072ff, #00c6ff);
@@ -89,28 +112,31 @@
       font-weight: bold;
       cursor: pointer;
     }
+
     .loader {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #00c6ff;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #00c6ff;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
+      width: 22px;
+      height: 22px;
       animation: spin 1s linear infinite;
       margin: 10px auto;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     .error { color: #ff6b6b; }
     .success { color: #38ef7d; }
+
     #result {
-      margin-top: 20px;
+      margin-top: 15px;
       background: #28394d;
-      padding: 20px;
-      border-radius: 12px;
-      font-size: 15px;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 14px;
       white-space: pre-line;
     }
     #copyBtn {
-      margin-top: 10px;
+      margin-top: 8px;
       background: #2ecc71;
     }
   </style>
@@ -118,8 +144,11 @@
 <body>
   <div class="container">
     <img src="logo.svg" alt="Logo" class="logo">
-    <h2>🔍 Magic Mall All In One Game ID Checker V1</h2>
+<h2> Magic Mall Game ID Checker V1</h2>
+<div id="typingText" style="font-size:13px; margin-bottom:10px; min-height:20px; color:#00c6ff;"></div>
+    <!-- ✅ Horizontal Scroll Tabs -->
     <div class="tabs" id="gameTabs"></div>
+
     <input type="text" id="game_id" placeholder="Game ID ထည့်ပါ">
     <input type="text" id="server_id" placeholder="Server ID (အချို့ဂိမ်းများသာလိုအပ်သည်)">
     <button id="checkBtn">စစ်ဆေးမည်</button>
@@ -130,8 +159,8 @@
   <script>
     const clickSound = new Audio("clicksound.mp3");
     const games = [
-      { id: 'pubgm-global', name: 'PUBG Mobile Global' },
-      { id: 'mcgg', name: 'Magic Chess GoGo' },
+      { id: 'pubgm-global', name: 'PUBG Mobile' },
+      { id: 'mcgg', name: 'Magic Chess' },
       { id: 'dfm', name: 'Delta Force' },
       { id: 'blood-strike', name: 'Blood Strike' },
       { id: 'arena-breakout', name: 'Arena Breakout' },
@@ -209,8 +238,38 @@
         resultDiv.innerHTML = `<p class='error'>⚠️ Error: ${err.message}</p>`;
       }
     }
+
+    // ✅ Scroll Animation for Tabs
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    observer.observe(document.querySelector('.tabs'));
   </script>
-    <footer style="margin-top:60px; padding:30px 20px; background:linear-gradient(135deg, #00c6ff, #0072ff); color:white; text-align:center; border-top-left-radius:20px; border-top-right-radius:20px; box-shadow:0 -8px 25px rgba(0,0,0,0.3); font-family:'Segoe UI', sans-serif; animation:glow 4s infinite alternate;">
+<!-- Add at the very bottom before </body> -->
+<script>
+  const quote = `"မိတ်ဆွေရဲ့  In Game Name  တွေကို လျင်မြန်စွာစစ်ဆေးနိုင်ပါတယ်။"`;
+  const typingElement = document.getElementById("typingText");
+  let i = 0;
+
+  function typeEffect() {
+    if (i < quote.length) {
+      typingElement.innerHTML += quote.charAt(i);
+      i++;
+      setTimeout(typeEffect, 45);
+    }
+  }
+
+  window.addEventListener("load", () => {
+    setTimeout(typeEffect, 500);
+  });
+</script>
+  <!-- Your footer, popup etc. can remain unchanged below -->
+<footer style="margin-top:60px; padding:30px 20px; background:linear-gradient(135deg, #00c6ff, #0072ff); color:white; text-align:center; border-top-left-radius:20px; border-top-right-radius:20px; box-shadow:0 -8px 25px rgba(0,0,0,0.3); font-family:'Segoe UI', sans-serif; animation:glow 4s infinite alternate;">
     <h3 style="margin-bottom:10px; font-size:22px; letter-spacing:0.5px;">📢 Connect With Us</h3>
     <div style="margin-top:20px; display:flex; justify-content:center; gap:30px; flex-wrap:wrap;">
       <a href="https://t.me/Magic_Mall_GameShop" target="_blank" title="Telegram Account" style="text-align:center; text-decoration:none;">
@@ -234,7 +293,7 @@
       }
     </style>
   </footer>
-    <!-- 🔽 Add this just before </body> -->
+  <!-- 🔽 Add this just before </body> -->
 
 <!-- POPUP -->
 <div id="popupOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,20,30,0.85); align-items:center; justify-content:center; z-index:9999;">
@@ -259,23 +318,37 @@
 
 <!-- POPUP SCRIPT -->
 <script>
-  function showPopup() {
-    document.getElementById("popupOverlay").style.display = "flex";
-  }
+function showPopup() {
+  document.getElementById("popupOverlay").style.display = "flex";
+}
 
-  function closePopup() {
-    document.getElementById("popupOverlay").style.display = "none";
-    sessionStorage.setItem("hasSeenPopup", "true");
+function closePopup() {
+  document.getElementById("popupOverlay").style.display = "none";
+  // No storage, so popup will show every load
+}
+
+window.addEventListener("load", () => {
+  setTimeout(showPopup, 3000); // Always show after 3 seconds
+});
+</script>
+<script>
+  const quote = `"မိတ်ဆွေရဲ့ Mobile Legends account server နှင့် double diamond တွေကို လျင်မြန်စွာစစ်ဆေးနိုင်ပါတယ်။"`;
+  const typingElement = document.getElementById("typingText");
+  let i = 0;
+
+  function typeEffect() {
+    if (i < quote.length) {
+      typingElement.innerHTML += quote.charAt(i);
+      i++;
+      setTimeout(typeEffect, 45); // Speed of typing
+    }
   }
 
   window.addEventListener("load", () => {
-    const hasSeenPopup = sessionStorage.getItem("hasSeenPopup");
-    if (!hasSeenPopup) {
-      setTimeout(showPopup, 3000); // Show after 3 seconds
-    }
+    setTimeout(typeEffect, 500); // Delay before typing starts
   });
 </script>
-    <!-- ✅ Floating Draggable Telegram Button -->
+  <!-- ✅ Floating Draggable Telegram Button -->
 <div id="contactUsBtn" onclick="showContactPopup()" style="position:fixed; bottom:30px; right:30px; background:linear-gradient(to right, #0088cc, #00c6ff); padding:12px 16px; border-radius:50px; display:flex; align-items:center; gap:8px; color:#fff; font-weight:bold; font-size:14px; box-shadow:0 0 12px rgba(0,198,255,0.6); cursor:grab; z-index:10000; transition:top 0.15s ease, left 0.15s ease;">
   <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/telegram.svg" alt="Telegram" style="width:20px; height:20px; filter:invert(1);">
   Help
