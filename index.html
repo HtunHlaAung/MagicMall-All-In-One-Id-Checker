@@ -240,40 +240,37 @@
       function showLoading() { loading.style.display = 'block'; }
       function hideLoading() { loading.style.display = 'none'; }
 
-      // API call placeholder builder
+      // Build API endpoint
       function buildEndpoint(game, playerId, server) {
-        // you need to set your actual worker URL below
         const baseUrl = 'https://magic-mall-game-id-check-v1.hlaaunghtun68.workers.dev/';
 
-        let endpoint = '';
         switch(game.id) {
-          case 'mcgg': endpoint = `/mcgg/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`; break;
-          case 'pubgm-global': endpoint = `/pubgm-global/${encodeURIComponent(playerId)}`; break;
-          case 'arena-breakout': endpoint = `/arena-breakout/${encodeURIComponent(playerId)}`; break;
-          case 'dfm': endpoint = `/dfm/${encodeURIComponent(playerId)}`; break;
-          case 'blood-strike': endpoint = `/blood-strike/${encodeURIComponent(playerId)}`; break;
-          case 'tom-and-jerry-chase': endpoint = `/tom-and-jerry-chase/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`; break;
-          case 'speed-drifters': endpoint = `/speed-drifters/${encodeURIComponent(playerId)}`; break;
-          case 'revelation': endpoint = `/revelation/${encodeURIComponent(playerId)}`; break;
-          case 'opm-the-strongest': endpoint = `/opm-the-strongest/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`; break;
-          case 'mu-devils-awaken': endpoint = `/mu-devils-awaken/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`; break;
-          case 'mu-origin-3': endpoint = `/mu-origin-3/${encodeURIComponent(playerId)}`; break;
-          case 'honor-of-kings': endpoint = `/honor-of-kings/${encodeURIComponent(playerId)}`; break;
-          case 'genshin': endpoint = `/genshin/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`; break;
-          case 'arena-of-valor': endpoint = `/arena-of-valor/${encodeURIComponent(playerId)}`; break;
-          case 'ace-racer': endpoint = `/ace-racer/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`; break;
-          case 'lifeafter': endpoint = `/lifeafter/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`; break;
-          case 'dragon-raja': endpoint = `/dragon-raja/${encodeURIComponent(playerId)}`; break;
-          case 'eggy-party': endpoint = `/eggy-party/${encodeURIComponent(playerId)}/global`; break;
-          case 'pokemonunite': endpoint = `/pokemonunite/${encodeURIComponent(playerId)}`; break;
-          case 'gov-nikke': endpoint = `/gov-nikke/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`; break;
-          case 'ff-global': endpoint = `/ff-global/${encodeURIComponent(playerId)}`; break;
-          default: endpoint = '';
+          case 'mcgg': return `${baseUrl}mcgg/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`;
+          case 'pubgm-global': return `${baseUrl}pubgm-global/${encodeURIComponent(playerId)}`;
+          case 'arena-breakout': return `${baseUrl}arena-breakout/${encodeURIComponent(playerId)}`;
+          case 'dfm': return `${baseUrl}dfm/${encodeURIComponent(playerId)}`;
+          case 'blood-strike': return `${baseUrl}blood-strike/${encodeURIComponent(playerId)}`;
+          case 'tom-and-jerry-chase': return `${baseUrl}tom-and-jerry-chase/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`;
+          case 'speed-drifters': return `${baseUrl}speed-drifters/${encodeURIComponent(playerId)}`;
+          case 'revelation': return `${baseUrl}revelation/${encodeURIComponent(playerId)}`;
+          case 'opm-the-strongest': return `${baseUrl}opm-the-strongest/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`;
+          case 'mu-devils-awaken': return `${baseUrl}mu-devils-awaken/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`;
+          case 'mu-origin-3': return `${baseUrl}mu-origin-3/${encodeURIComponent(playerId)}`;
+          case 'honor-of-kings': return `${baseUrl}honor-of-kings/${encodeURIComponent(playerId)}`;
+          case 'genshin': return `${baseUrl}genshin/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`;
+          case 'arena-of-valor': return `${baseUrl}arena-of-valor/${encodeURIComponent(playerId)}`;
+          case 'ace-racer': return `${baseUrl}ace-racer/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`;
+          case 'lifeafter': return `${baseUrl}lifeafter/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`;
+          case 'dragon-raja': return `${baseUrl}dragon-raja/${encodeURIComponent(playerId)}`;
+          case 'eggy-party': return `${baseUrl}eggy-party/${encodeURIComponent(playerId)}/global`;
+          case 'pokemonunite': return `${baseUrl}pokemonunite/${encodeURIComponent(playerId)}`;
+          case 'gov-nikke': return `${baseUrl}gov-nikke/${encodeURIComponent(playerId)}/${encodeURIComponent(server)}`;
+          case 'ff-global': return `${baseUrl}ff-global/${encodeURIComponent(playerId)}`;
+          default: return '';
         }
-        return baseUrl + endpoint;
       }
 
-      // Parse API response to display result
+      // Parse API response
       function parseResponse(json) {
         if (json.error === true || json.success === false) return '❌ ID not found or error.';
         const d = json.data;
